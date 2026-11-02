@@ -1,9 +1,8 @@
 #include "mbed.h"
-
-DigitalIn BUTTON1(D4);
 DigitalOut red(D1);
 DigitalOut blue(D2);
 DigitalOut green(D3);
+DigitalIn but1(D4);
 /*
 purpose of this prototype 
 to turn leds on based on the time the button was held down for 
@@ -23,20 +22,20 @@ void displayLight(char Lightcol)
 {
   if (Lightcol == 'r')
   {
-    red = true;
+    red = 1;
   }
   if (Lightcol == 'b')
   {
-    blue = true;
+    blue = 1;
   }
   if (Lightcol == 'g')
   {
-    green = true;
+    green = 1;
   }
-  thread_sleep_for(1000);
-  red = false;
-  blue = false;
-  green = false;
+  thread_sleep_for(100);
+  red = 0;
+  blue = 0;
+  green = 0;
  
 }
 
@@ -50,21 +49,24 @@ int main()
 {
   Timer buttontimer;
   float time1 = 0;
+  
   while(true)
   {
     
-    if(BUTTON1 == true) // if button is pressed this will be true 
+    
+    if(but1 == 1) // if button is pressed this will be true 
     {
+      
       buttontimer.start();
     }
     else // when button is not pressed (only realy matters when button is relesed)
     {
       buttontimer.stop();
-      time1 = buttontimer.read();
+      time1 = buttontimer.elapsed_time().count() / 1000.0f; // convert into secconds
       buttontimer.reset();
       
-
     }
+
     if(time1 != 0 )
     {
       if(time1 <=1)
